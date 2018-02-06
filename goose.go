@@ -80,6 +80,25 @@ func Run(command string, db *sql.DB, dir string, args ...string) error {
 		if err := Version(db, dir); err != nil {
 			return err
 		}
+	case "skip":
+		if err := Skip(db, dir); err != nil {
+			return err
+		}
+	case "skip-one":
+		if err := SkipOne(db, dir); err != nil {
+			return err
+		}
+	case "skip-to":
+		if len(args) == 0 {
+			return fmt.Errorf("up-to must be of form: goose [OPTIONS] DRIVER DBSTRING skip-to VERSION")
+		}
+		version, err := strconv.ParseInt(args[0], 10, 64)
+		if err != nil {
+			return fmt.Errorf("version must be a number (got '%s')", args[0])
+		}
+		if err := SkipTo(db, dir, version); err != nil {
+			return err
+		}
 	default:
 		return fmt.Errorf("%q: no such command", command)
 	}

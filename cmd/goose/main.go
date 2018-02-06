@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/pressly/goose"
+	"github.com/andrefsp/goose"
 
 	// Init DB drivers.
 	_ "github.com/go-sql-driver/mysql"
@@ -113,6 +113,8 @@ Commands:
     up-to VERSION        Migrate the DB to a specific VERSION
     down                 Roll back the version by 1
     down-to VERSION      Roll back to a specific VERSION
+    skip                 Skips migrations to the most recent version available
+    skip-to VERSION      Skips migrations to a specific VERSION
     redo                 Re-run the latest migration
     reset                Roll back all migrations
     status               Dump the migration status for the current DB

@@ -51,6 +51,21 @@ func (m *Migration) Down(db *sql.DB) error {
 	return nil
 }
 
+// Skips a migration
+func (m *Migration) Skip(db *sql.DB) error {
+	tx, err := db.Begin()
+	if err != nil {
+		log.Fatal("db.Begin: ", err)
+	}
+
+	if _, err := tx.Exec(GetDialect().insertVersionSQL(), m.Version, true); err != nil {
+		tx.Rollback()
+		return err
+	}
+	log.Println("OK   ", filepath.Base(m.Source))
+	return tx.Commit()
+}
+
 func (m *Migration) run(db *sql.DB, direction bool) error {
 	switch filepath.Ext(m.Source) {
 	case ".sql":

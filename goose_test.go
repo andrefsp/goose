@@ -41,3 +41,18 @@ func TestCustomBinary(t *testing.T) {
 		}
 	}
 }
+
+func TestSkipMigrations(t *testing.T) {
+	commands := []string{
+		"go build -i -o goose ./cmd/goose",
+		"./goose -dir=examples/sql-migrations sqlite3 sql.db skip",
+	}
+
+	for _, cmd := range commands {
+		args := strings.Split(cmd, " ")
+		out, err := exec.Command(args[0], args[1:]...).CombinedOutput()
+		if err != nil {
+			t.Fatalf("%s:\n%v\n\n%s", err, cmd, out)
+		}
+	}
+}
